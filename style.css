@@ -1,0 +1,10 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-image: url("https://github.com/thomasjedstrom/1942/blob/master/img/background.jpg?raw=true");
+  }
+
+  canvas {
+    display: block;
+  }
+  

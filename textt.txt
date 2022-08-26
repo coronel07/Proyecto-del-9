@@ -1,0 +1,7 @@
+<div class="container">
+		<div class="square">
+			<div id="canvas-content" class="content">
+
+			</div>
+		</div>
+	</div>

@@ -94,3 +94,4 @@ function EvilOvni(){
 	bulletovni.vel.y = 20;
 	bulletovni.life = 40;
 }
+//fasfasfdskfsdf

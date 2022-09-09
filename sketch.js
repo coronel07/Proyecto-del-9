@@ -1,6 +1,10 @@
 let frames = 12;
 let ancho = 800;
 let largo = 800;
+let bg;
+let x1 = 0;
+let x2;
+let scrollSpeed = 2;
 let posX;
 let posY;
 let plane;
@@ -14,6 +18,8 @@ let bulletovni;
 let lives = 3;
 
 function preload(){
+	bg = loadImage("./assets/background.jpg");
+
 	plane = new Sprite(400,650,20,20);
 	plane.addImg("./assets/theplane.png");
 
@@ -42,11 +48,12 @@ function setup() {
 	frameRate(frames);
 	let canvas = createCanvas(ancho, largo);
 	//canvas.parent("canvas-content")
-	background(150);
 	
 	Enemies();
 	setInterval(EnemiesBullets, 1500);
+	setInterval(Livess, 50);
 
+	x2 = width;
 	/*image(heart, 0, 750);
 	image(heart, 45, 750);
 	image(heart, 90, 750);*/
@@ -54,9 +61,19 @@ function setup() {
 }
 
 function draw() {
-	Livess();
 
-	clear();
+	image(bg,x1,0,ancho,largo);
+	image(bg,x2,0,ancho,largo);
+
+    x1 -= scrollSpeed;
+	x2 -= scrollSpeed;
+
+	if (x1 < -width){
+		x1 = width;
+	}
+	if (x2 < -width){
+		x2 = width;
+	}
 
 	strokeWeight(3);
 	noFill();
@@ -66,10 +83,7 @@ function draw() {
 	textSize(30);
 	text("Vidas: "+lives, 10 ,780);
 
-	/*plane.overlap(bulletovni || bulletwarplane || bulletwarplane2 || bulletwarplane3|| bullet2warplane3, BulletsColision);
-	function BulletsColision(){
-		
-	}*/
+	drawSprites();
 }
 
 function keyPressed(){
@@ -142,7 +156,7 @@ function EnemiesBullets(){
 	bulle2twarplane3.life = 40;
 }
 
-function Livess(){
+function Livess(){	
 	plane.overlap(bulletovni, colision);
 		function colision(plane, bulletovni) {
 			bulletovni.remove();

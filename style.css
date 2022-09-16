@@ -1,18 +1,35 @@
+
 html,
 body {
   margin: 0;
   padding: 0;
   background: gray;
-
+ 
 }
-
 canvas {
   padding-left: 0;
   padding-right: 0;
   margin-left: auto;
   margin-right: auto;
   display: block;
+  margin-block-end: auto;
   width: 800px;
-  
+}
+.resetButton{
+  display: flex;
+  justify-content:calc(100,100);
+  background: black;
+  color: white;
+}
+button{
+  display: flex;
+  justify-content: center;
+  background: black;
+  color: white;
+}
+div{
+  text-align: center;
+  font-size: 50px
 
 }
+

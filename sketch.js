@@ -24,15 +24,14 @@ let livesovni = 3;
 let liveswarplane = 3;
 let liveswarplane2 = 3;
 let liveswarplane3 = 4;
-let explosion_sprite_sheet;
-let explosion_animation;
+let explotiongif;
 let fondo;
 let playing = false;
 
 function preload() {
 	bg = loadImage("./assets/background.jpg");
 
-	plane = new Sprite(400, 650, 20, 20);
+	plane = new Group();
 	plane.addImg("./assets/theplane.png");
 
 	ovni = new Sprite(random(250, 360), random(10, 70), 20, 20);
@@ -58,8 +57,7 @@ function preload() {
 	bullets1 = new Group();
 	bullets1.addImg("./assets/bullet1.png");
 
-		// explosion_sprite_sheet = loadSpriteSheet("./assets/spritesheetexplosion.png");
-		// explosion_animation = loadAnimation(explosion_sprite_sheet);
+	explotiongif = loadImage("./assets/explotiongif.gif");
 
 	heart = loadImage("./assets/heart.png");	
 
@@ -70,7 +68,9 @@ function setup() {
 	let canvas = createCanvas(ancho, largo);
 	//canvas.parent("canvas-content")
 
+	mainPlane();
 	Enemies();
+	setInterval(EnemiesMoves, 2000);
 	setInterval(EnemiesBullets, 1500);
 	setInterval(Livess, 50);
 
@@ -80,7 +80,6 @@ function setup() {
 }
 
 function menu() {
-	console.log("hola")
 	image(fondo, 0, 0, ancho, largo);
 	button = createButton('Play');
 	button.position(61, 555);
@@ -88,7 +87,23 @@ function menu() {
 }
 
 function game() {
-	console.log("hola2")
+	/*ovni.remove();
+	warplane.remove();
+	warplane2.remove();
+	warplane3.remove();*/
+
+	/*ovni = new Sprite(random(250, 360), random(10, 70), 20, 20);
+	ovni.addImg("./enemies/ovni.png");
+
+	warplane = new Sprite(random(90, 220), random(10, 70), 20, 20);
+	warplane.addImg("./enemies/warplane.png");
+
+	warplane2 = new Sprite(random(430, 650), random(10, 70), 20, 20);
+	warplane2.addImg("./enemies/warplane2.png");
+
+	warplane3 = new Sprite(random(690, 770), random(10, 70), 20, 20);
+	warplane3.addImg("./enemies/warplane3.png");*/
+
 	image(bg, 0, y1, ancho, largo);
 	image(bg, 0, y2, ancho, largo);
 
@@ -101,7 +116,9 @@ function game() {
 	if (y2 < -width) {
 		y2 = width;
 	}
+
 	Limits();
+	EnemiesLives();
 	ifEnemiesLivesIs0();
 
 	strokeWeight(3);
@@ -111,16 +128,16 @@ function game() {
 	fill(230);
 	textSize(30);
 	text("Vidas    : " + lives, 10, 780);
-	// text("Vidas ovni   : " + livesovni, 10, 700);
-	// text("Vidas warplane   : " + liveswarplane, 10, 600);
-	// text("Vidas warplane 2  : " + liveswarplane2, 10, 500);
-	// text("Vidas warplane 3  : " + liveswarplane3, 10, 400);
+	text("Vidas ovni   : " + livesovni, 10, 700);
+	text("Vidas warplane   : " + liveswarplane, 10, 600);
+	text("Vidas warplane 2  : " + liveswarplane2, 10, 500);
+	text("Vidas warplane 3  : " + liveswarplane3, 10, 400);
 	image(lifeimg, 82, 753);
 }
 
 function draw() {
 	if (playing) {
-		game()
+		game();
 	}
 	else{
 		menu();
@@ -128,22 +145,28 @@ function draw() {
 	drawSprites();
 }
 
+//función para generar el avión principal
+function mainPlane(){
+	mainplane = new plane.Sprite(400, 650, 20, 20);
+	
+}
+
 function keyPressed() {
 	if (keyCode === LEFT_ARROW) {
-		plane.vel.x -= 18;
+		mainplane.vel.x -= 18;
 		ovni.vel.x -= 10;
 	}
 	if (keyCode === RIGHT_ARROW) {
-		plane.vel.x += 18;
+		mainplane.vel.x += 18;
 		ovni.vel.x += 10;
 	}
 
-	if (plane.vel.x <= -18) {
-		plane.vel.x = -18;
+	if (mainplane.vel.x <= -18) {
+		mainplane.vel.x = -18;
 	}
 
-	if (plane.vel.x >= 18) {
-		plane.vel.x = 18;
+	if (mainplane.vel.x >= 18) {
+		mainplane.vel.x = 18;
 	}
 
 	if (ovni.vel.x <= -10) {
@@ -186,7 +209,7 @@ function Limits() {
 
 function mousePressed() {
 	//toque mouse dispare
-	bulletplane = new bullets.Sprite(plane.x, plane.y - 50);
+	bulletplane = new bullets.Sprite(mainplane.x, mainplane.y - 50);
 	//bullet.direction = plane.direction;
 	bulletplane.vel.y = -30;
 	bulletplane.life = 30;
@@ -222,6 +245,12 @@ function EnemiesBullets() {
 	bullet2warplane3.vel.y = 20;
 	bullet1warplane3.life = 40;
 	bullet2warplane3.life = 40;
+}
+
+//función para determinar el movimiento de los enemigos
+function EnemiesMoves(){
+	warplane.vel.x += random(10,30);
+	warplane.vel.x -= random(10,30);
 }
 
 /*función para bajar las vidas del avión principal 
@@ -263,53 +292,62 @@ si una bala del avión principal colisiona con el enemigo*/
 function EnemiesLives() {
 	ovni.overlap(bulletplane, colision01);
 	function colision01(ovni, bulletplane) {
-		bulletplane.remove();
 		livesovni--;
+		bulletplane.remove();
 	}
 
 	warplane.overlap(bulletplane, colision02);
 	function colision02(warplane, bulletplane) {
-		bulletplane.remove();
 		liveswarplane--;
+		bulletplane.remove();
 	}
 
 	warplane2.overlap(bulletplane, colision03);
 	function colision03(warplane2, bulletplane) {
-		bulletplane.remove();
 		liveswarplane2--;
+		bulletplane.remove();
 	}
 
 	warplane3.overlap(bulletplane, colision04);
 	function colision04(warplane3, bulletplane) {
-		bulletplane.remove();
 		liveswarplane3--;
-
+		bulletplane.remove();
 	}
-
-
 }
 
 /*función para que si la vida de los enemigos es 0, desaparezca 
 junto a un sprite de explosión y se regenere uno nuevo*/
-function ifEnemiesLivesIs0() {
+function ifEnemiesLivesIs0(){
 	if (livesovni <= 0) {
-		//animation(explosion_animation, ovni.x, ovni.y);
-		ovni
-		.remove();
+		explosionovni = image(explotiongif, ovni.x-50, ovni.y-50);
+		//explotiongif.size(40, 40);
+		//explotiongif.loadPixels();
+		ovni.remove();
+		bulletovni.remove();
 	}
 
 	if (liveswarplane <= 0) {
-		//animation(explosion_animation, warplane.x, warplane.y);
+		image(explotiongif, warplane.x-50, warplane.y-50);
+		//explotiongif.size(40, 40);
+		//explotiongif.loadPixels();
 		warplane.remove();
+		bulletwarplane.remove();
 	}
 
 	if (liveswarplane2 <= 0) {
-		//animation(explosion_animation, warplane2.x, warplane2.y);
+		image(explotiongif, warplane2.x-50, warplane2.y-50);
+		//explotiongif.size(40, 40);
+		//explotiongif.loadPixels();
 		warplane2.remove();
+		bulletwarplane2.remove();
 	}
 
 	if (liveswarplane3 <= 0) {
-		//animation(explosion_animation, warplane3.x, warplane3.y);
+		image(explotiongif, warplane3.x-40, warplane3.y-40);
+		//explotiongif.size(40, 40);
+		//explotiongif.loadPixels();
 		warplane3.remove();
+		bullet1warplane3.remove();
+		bullet2warplane3.remove();
 	}
 }

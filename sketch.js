@@ -27,6 +27,8 @@ let liveswarplane3 = 4;
 let explotiongif;
 let fondo;
 let playing = false;
+let powerup;
+let enemiesarr = [];
 
 function preload() {
 	bg = loadImage("./assets/background.jpg");
@@ -57,25 +59,29 @@ function preload() {
 	bullets1 = new Group();
 	bullets1.addImg("./assets/bullet1.png");
 
-	explotiongif = loadImage("./assets/explotiongif.gif");
+	explotiongif = loadImage("./assets/explotion.gif");
+
+    //powerup = loadImage("./assets/powerup.gif");
 
 	heart = loadImage("./assets/heart.png");	
 
 	fondo = loadImage("./assets/fondo.png")
 }
+
 function setup() {
 	frameRate(frames);
 	let canvas = createCanvas(ancho, largo);
 	//canvas.parent("canvas-content")
 
 	mainPlane();
+
 	Enemies();
 	setInterval(EnemiesMoves, 2000);
 	setInterval(EnemiesBullets, 1500);
 	setInterval(Livess, 50);
+    //setInterval(powerupSpawn, 5000);
 
 	y2 = width;
-	
 
 }
 
@@ -87,23 +93,6 @@ function menu() {
 }
 
 function game() {
-	/*ovni.remove();
-	warplane.remove();
-	warplane2.remove();
-	warplane3.remove();*/
-
-	/*ovni = new Sprite(random(250, 360), random(10, 70), 20, 20);
-	ovni.addImg("./enemies/ovni.png");
-
-	warplane = new Sprite(random(90, 220), random(10, 70), 20, 20);
-	warplane.addImg("./enemies/warplane.png");
-
-	warplane2 = new Sprite(random(430, 650), random(10, 70), 20, 20);
-	warplane2.addImg("./enemies/warplane2.png");
-
-	warplane3 = new Sprite(random(690, 770), random(10, 70), 20, 20);
-	warplane3.addImg("./enemies/warplane3.png");*/
-
 	image(bg, 0, y1, ancho, largo);
 	image(bg, 0, y2, ancho, largo);
 
@@ -241,10 +230,10 @@ function EnemiesBullets() {
 
 	bullet1warplane3 = new bullets2.Sprite(warplane3.x - 45, warplane3.y + 50);
 	bullet2warplane3 = new bullets2.Sprite(warplane3.x + 35, warplane3.y + 50);
-	bullet1warplane3.vel.y = 20;
-	bullet2warplane3.vel.y = 20;
-	bullet1warplane3.life = 40;
-	bullet2warplane3.life = 40;
+	bullet1warplane3.vel.y = 27;
+	bullet2warplane3.vel.y = 27;
+	bullet1warplane3.life = 30;
+	bullet2warplane3.life = 30;
 }
 
 //función para determinar el movimiento de los enemigos
@@ -281,7 +270,7 @@ function Livess() {
 	}
 
 	plane.overlap(bullet2warplane3, colision4);
-	function colision4(plane, bullet2warplane3) {
+	function colision5(plane, bullet2warplane3) {
 		bullet2warplane3.remove();
 		lives--;
 	}
@@ -319,7 +308,7 @@ function EnemiesLives() {
 junto a un sprite de explosión y se regenere uno nuevo*/
 function ifEnemiesLivesIs0(){
 	if (livesovni <= 0) {
-		explosionovni = image(explotiongif, ovni.x-50, ovni.y-50);
+		explosionovni = image(explotiongif, ovni.x-40, ovni.y-40);
 		//explotiongif.size(40, 40);
 		//explotiongif.loadPixels();
 		ovni.remove();
@@ -327,7 +316,7 @@ function ifEnemiesLivesIs0(){
 	}
 
 	if (liveswarplane <= 0) {
-		image(explotiongif, warplane.x-50, warplane.y-50);
+		image(explotiongif, warplane.x-40, warplane.y-40);
 		//explotiongif.size(40, 40);
 		//explotiongif.loadPixels();
 		warplane.remove();
@@ -335,7 +324,7 @@ function ifEnemiesLivesIs0(){
 	}
 
 	if (liveswarplane2 <= 0) {
-		image(explotiongif, warplane2.x-50, warplane2.y-50);
+		image(explotiongif, warplane2.x-40, warplane2.y-40);
 		//explotiongif.size(40, 40);
 		//explotiongif.loadPixels();
 		warplane2.remove();
@@ -343,7 +332,7 @@ function ifEnemiesLivesIs0(){
 	}
 
 	if (liveswarplane3 <= 0) {
-		image(explotiongif, warplane3.x-40, warplane3.y-40);
+		explosion4 = image(explotiongif, warplane3.x-30, warplane3.y-30);
 		//explotiongif.size(40, 40);
 		//explotiongif.loadPixels();
 		warplane3.remove();
@@ -351,3 +340,14 @@ function ifEnemiesLivesIs0(){
 		bullet2warplane3.remove();
 	}
 }
+
+//función para generar powerups
+/*function powerupSpawn(){
+    image(powerup, random(30,770), 630, 60, 60);
+
+}*/
+
+/*function deleteImage(){
+	setInterval()
+
+}*/
